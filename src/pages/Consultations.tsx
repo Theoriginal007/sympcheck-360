@@ -35,11 +35,11 @@ import {
   Loader2
 } from 'lucide-react';
 
-// Mock data for doctors
+// Mock data for doctors - making all available
 const doctors = [
   { id: 1, name: "Dr. Sarah Kimani", specialty: "General Practitioner", image: "https://i.pravatar.cc/150?img=32", available: true, rating: 4.8, experience: "8 years" },
   { id: 2, name: "Dr. James Ouma", specialty: "Pediatrician", image: "https://i.pravatar.cc/150?img=60", available: true, rating: 4.7, experience: "12 years" },
-  { id: 3, name: "Dr. Lucy Njeri", specialty: "Cardiologist", image: "https://i.pravatar.cc/150?img=40", available: false, rating: 4.9, experience: "15 years" },
+  { id: 3, name: "Dr. Lucy Njeri", specialty: "Cardiologist", image: "https://i.pravatar.cc/150?img=40", available: true, rating: 4.9, experience: "15 years" },
   { id: 4, name: "Dr. Michael Wafula", specialty: "Dermatologist", image: "https://i.pravatar.cc/150?img=52", available: true, rating: 4.6, experience: "6 years" },
 ];
 
@@ -222,8 +222,8 @@ const Consultations = () => {
                                 {doctors.map((doctor) => (
                                   <div
                                     key={doctor.id}
-                                    className={`border rounded-lg p-4 cursor-pointer transition-all ${selectedDoctor === doctor.id ? 'border-health-primary bg-health-primary/5' : 'border-gray-200 hover:border-health-primary/50'} ${!doctor.available ? 'opacity-60' : ''}`}
-                                    onClick={() => doctor.available && setSelectedDoctor(doctor.id)}
+                                    className={`border rounded-lg p-4 cursor-pointer transition-all ${selectedDoctor === doctor.id ? 'border-health-primary bg-health-primary/5' : 'border-gray-200 hover:border-health-primary/50'}`}
+                                    onClick={() => setSelectedDoctor(doctor.id)}
                                   >
                                     <div className="flex items-center">
                                       <img src={doctor.image} alt={doctor.name} className="w-16 h-16 rounded-full mr-4" />
@@ -235,8 +235,8 @@ const Consultations = () => {
                                           <span className="mr-2">{doctor.rating}</span>
                                           <span className="text-gray-500">• {doctor.experience}</span>
                                         </div>
-                                        <span className={`text-xs px-2 py-0.5 rounded-full mt-1 inline-block ${doctor.available ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                                          {doctor.available ? 'Available' : 'Unavailable'}
+                                        <span className="text-xs px-2 py-0.5 rounded-full mt-1 inline-block bg-green-100 text-green-800">
+                                          Available
                                         </span>
                                       </div>
                                     </div>

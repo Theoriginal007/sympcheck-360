@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
   Menu, X, Heart, Activity, Video, BookOpen 
@@ -11,6 +11,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -75,10 +76,10 @@ const Header = () => {
           </nav>
           
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" className="rounded-full">
+            <Button variant="outline" className="rounded-full" onClick={() => navigate('/sign-in')}>
               Sign In
             </Button>
-            <Button className="rounded-full bg-health-primary hover:bg-health-primary/90">
+            <Button className="rounded-full bg-health-primary hover:bg-health-primary/90" onClick={() => navigate('/get-started')}>
               Get Started
             </Button>
           </div>
@@ -115,10 +116,17 @@ const Header = () => {
                 </Link>
               ))}
               <div className="pt-4 flex flex-col space-y-2">
-                <Button variant="outline" className="w-full justify-start">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start"
+                  onClick={() => navigate('/sign-in')}
+                >
                   Sign In
                 </Button>
-                <Button className="w-full justify-start bg-health-primary hover:bg-health-primary/90">
+                <Button 
+                  className="w-full justify-start bg-health-primary hover:bg-health-primary/90"
+                  onClick={() => navigate('/get-started')}
+                >
                   Get Started
                 </Button>
               </div>

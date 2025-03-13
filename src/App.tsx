@@ -10,6 +10,8 @@ import SymptomChecker from "./pages/SymptomChecker";
 import Dashboard from "./pages/Dashboard";
 import Consultations from "./pages/Consultations";
 import Education from "./pages/Education";
+import SignIn from "./pages/SignIn";
+import GetStarted from "./pages/GetStarted";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +27,8 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/consultations" element={<Consultations />} />
           <Route path="/education" element={<Education />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/get-started" element={<GetStarted />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
