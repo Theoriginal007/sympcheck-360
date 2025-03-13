@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, Search, Video, FileText, BarChart, ArrowRight, PlayCircle, Clock, Download } from 'lucide-react';
+import { BookOpen, Search, Video, FileText, BarChart, ArrowRight, PlayCircle, Clock, Download, Eye } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 
-// Mock education resources data
+// Mock education resources data - enhanced with download URLs
 const educationResources = [
   {
     id: 1,
@@ -18,6 +19,7 @@ const educationResources = [
     duration: "10 min read",
     thumbnail: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     featured: true,
+    url: "#"
   },
   {
     id: 2,
@@ -27,6 +29,7 @@ const educationResources = [
     duration: "15 min",
     thumbnail: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     featured: true,
+    url: "#"
   },
   {
     id: 3,
@@ -36,6 +39,7 @@ const educationResources = [
     duration: "8 min read",
     thumbnail: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     featured: false,
+    url: "#"
   },
   {
     id: 4,
@@ -45,6 +49,7 @@ const educationResources = [
     duration: "20 min",
     thumbnail: "https://images.unsplash.com/photo-1493836512294-502baa1986e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     featured: false,
+    url: "#"
   },
   {
     id: 5,
@@ -54,6 +59,8 @@ const educationResources = [
     duration: "12 pages",
     thumbnail: "https://images.unsplash.com/photo-1632833239869-a37e3a5806d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     featured: false,
+    url: "#download-pdf",
+    fileSize: "2.4 MB"
   },
   {
     id: 6,
@@ -63,6 +70,7 @@ const educationResources = [
     duration: "15 min read",
     thumbnail: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     featured: true,
+    url: "#"
   },
   {
     id: 7,
@@ -72,6 +80,8 @@ const educationResources = [
     duration: "1 page",
     thumbnail: "https://images.unsplash.com/photo-1565071559227-20ab25b7685e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     featured: false,
+    url: "#download-pdf",
+    fileSize: "1.2 MB"
   },
   {
     id: 8,
@@ -81,6 +91,7 @@ const educationResources = [
     duration: "25 min",
     thumbnail: "https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     featured: false,
+    url: "#"
   },
 ];
 
@@ -100,6 +111,9 @@ const Education = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedTab, setSelectedTab] = useState("all");
+  const [selectedResource, setSelectedResource] = useState<any>(null);
+  const [showResourceModal, setShowResourceModal] = useState(false);
+  const { toast } = useToast();
 
   // Filter resources based on search, category, and tab
   const filteredResources = educationResources.filter(resource => {
@@ -114,20 +128,28 @@ const Education = () => {
     return matchesSearch && matchesCategory && matchesTab;
   });
 
-  // Get resource type icon
-  const getResourceTypeIcon = (type: string) => {
-    switch (type) {
-      case 'video':
-        return <Video className="h-4 w-4" />;
-      case 'article':
-        return <FileText className="h-4 w-4" />;
-      case 'pdf':
-        return <FileText className="h-4 w-4" />;
-      case 'infographic':
-        return <BarChart className="h-4 w-4" />;
-      default:
-        return <BookOpen className="h-4 w-4" />;
-    }
+  // Handle resource selection
+  const handleResourceSelect = (resource: any) => {
+    setSelectedResource(resource);
+    setShowResourceModal(true);
+  };
+
+  // Handle resource download
+  const handleDownload = (resource: any) => {
+    toast({
+      title: "Download Started",
+      description: `${resource.title} will download shortly.`,
+      duration: 3000,
+    });
+
+    // Simulate download completion after a delay
+    setTimeout(() => {
+      toast({
+        title: "Download Complete",
+        description: `${resource.title} has been downloaded successfully.`,
+        duration: 3000,
+      });
+    }, 2000);
   };
 
   return (
@@ -180,7 +202,12 @@ const Education = () => {
               <TabsContent value="all" className="animate-fade-in">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredResources.map((resource) => (
-                    <ResourceCard key={resource.id} resource={resource} />
+                    <ResourceCard 
+                      key={resource.id} 
+                      resource={resource} 
+                      onView={() => handleResourceSelect(resource)}
+                      onDownload={() => handleDownload(resource)}
+                    />
                   ))}
                 </div>
               </TabsContent>
@@ -188,7 +215,12 @@ const Education = () => {
               <TabsContent value="featured" className="animate-fade-in">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredResources.map((resource) => (
-                    <ResourceCard key={resource.id} resource={resource} />
+                    <ResourceCard 
+                      key={resource.id} 
+                      resource={resource} 
+                      onView={() => handleResourceSelect(resource)}
+                      onDownload={() => handleDownload(resource)}
+                    />
                   ))}
                 </div>
               </TabsContent>
@@ -196,7 +228,12 @@ const Education = () => {
               <TabsContent value="articles" className="animate-fade-in">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredResources.map((resource) => (
-                    <ResourceCard key={resource.id} resource={resource} />
+                    <ResourceCard 
+                      key={resource.id} 
+                      resource={resource} 
+                      onView={() => handleResourceSelect(resource)}
+                      onDownload={() => handleDownload(resource)}
+                    />
                   ))}
                 </div>
               </TabsContent>
@@ -204,7 +241,12 @@ const Education = () => {
               <TabsContent value="videos" className="animate-fade-in">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredResources.map((resource) => (
-                    <ResourceCard key={resource.id} resource={resource} />
+                    <ResourceCard 
+                      key={resource.id} 
+                      resource={resource} 
+                      onView={() => handleResourceSelect(resource)}
+                      onDownload={() => handleDownload(resource)}
+                    />
                   ))}
                 </div>
               </TabsContent>
@@ -212,7 +254,12 @@ const Education = () => {
               <TabsContent value="documents" className="animate-fade-in">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredResources.map((resource) => (
-                    <ResourceCard key={resource.id} resource={resource} />
+                    <ResourceCard 
+                      key={resource.id} 
+                      resource={resource} 
+                      onView={() => handleResourceSelect(resource)}
+                      onDownload={() => handleDownload(resource)}
+                    />
                   ))}
                 </div>
               </TabsContent>
@@ -235,6 +282,80 @@ const Education = () => {
                 </Button>
               </div>
             )}
+
+            {/* Resource Viewer Modal */}
+            {showResourceModal && selectedResource && (
+              <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                <div className="bg-white rounded-xl max-w-3xl w-full max-h-[80vh] overflow-auto">
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <h2 className="text-2xl font-bold">{selectedResource.title}</h2>
+                      <button 
+                        onClick={() => setShowResourceModal(false)}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        ×
+                      </button>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <span className="inline-block bg-health-primary/10 text-health-primary px-3 py-1 rounded-full text-sm mr-2">
+                        {selectedResource.category}
+                      </span>
+                      <span className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                        {selectedResource.type.charAt(0).toUpperCase() + selectedResource.type.slice(1)}
+                      </span>
+                    </div>
+                    
+                    {selectedResource.type === 'video' ? (
+                      <div className="aspect-video bg-black rounded-lg mb-6 flex items-center justify-center">
+                        <div className="text-center text-white">
+                          <PlayCircle className="h-16 w-16 mx-auto mb-2" />
+                          <p>Video preview not available in demo</p>
+                        </div>
+                      </div>
+                    ) : selectedResource.type === 'pdf' || selectedResource.type === 'infographic' ? (
+                      <div className="aspect-[4/3] bg-gray-100 rounded-lg mb-6 p-8 flex items-center justify-center border">
+                        <div className="text-center">
+                          <FileText className="h-16 w-16 mx-auto mb-2 text-gray-400" />
+                          <p className="text-gray-600 mb-2">{selectedResource.title}</p>
+                          <p className="text-sm text-gray-500">{selectedResource.fileSize} • {selectedResource.duration}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <img 
+                        src={selectedResource.thumbnail} 
+                        alt={selectedResource.title}
+                        className="w-full h-64 object-cover rounded-lg mb-6"
+                      />
+                    )}
+                    
+                    <div className="prose max-w-none mb-6">
+                      <p>This is a placeholder content for the {selectedResource.title} resource. In a real application, this would contain the actual educational content.</p>
+                      <p>The content would be formatted appropriately based on the resource type and would provide valuable health information related to {selectedResource.category}.</p>
+                    </div>
+                    
+                    <div className="flex space-x-4">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => setShowResourceModal(false)}
+                      >
+                        Close
+                      </Button>
+                      {(selectedResource.type === 'pdf' || selectedResource.type === 'infographic') && (
+                        <Button 
+                          onClick={() => handleDownload(selectedResource)}
+                          className="bg-health-primary hover:bg-health-primary/90"
+                        >
+                          <Download className="mr-2 h-4 w-4" />
+                          Download
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </section>
       </main>
@@ -244,7 +365,15 @@ const Education = () => {
 };
 
 // Resource Card Component
-const ResourceCard = ({ resource }: { resource: any }) => {
+const ResourceCard = ({ 
+  resource, 
+  onView, 
+  onDownload 
+}: { 
+  resource: any, 
+  onView: () => void, 
+  onDownload: () => void 
+}) => {
   const getResourceTypeIcon = (type: string) => {
     switch (type) {
       case 'video':
@@ -298,19 +427,35 @@ const ResourceCard = ({ resource }: { resource: any }) => {
             {resource.duration}
           </div>
         </div>
-        <Button className="w-full mt-4 bg-health-primary hover:bg-health-primary/90">
+        
+        <div className="grid grid-cols-2 gap-2 mt-4">
+          <Button 
+            variant="outline" 
+            className="w-full"
+            onClick={onView}
+          >
+            <Eye className="mr-2 h-4 w-4" />
+            View
+          </Button>
+          
           {resource.type === 'pdf' || resource.type === 'infographic' ? (
-            <>
+            <Button 
+              className="w-full bg-health-primary hover:bg-health-primary/90"
+              onClick={onDownload}
+            >
               <Download className="mr-2 h-4 w-4" />
               Download
-            </>
+            </Button>
           ) : (
-            <>
-              View Resource
+            <Button 
+              className="w-full bg-health-primary hover:bg-health-primary/90"
+              onClick={onView}
+            >
+              Open
               <ArrowRight className="ml-2 h-4 w-4" />
-            </>
+            </Button>
           )}
-        </Button>
+        </div>
       </CardContent>
     </Card>
   );

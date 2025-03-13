@@ -2,20 +2,35 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Loader2, ChevronRight, Stethoscope, AlertCircle } from 'lucide-react';
+import { Search, Loader2, ChevronRight, Stethoscope, AlertCircle, ThumbsUp } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 // Mock data for demo purposes
 const mockSymptomDatabase = [
-  { id: 1, name: "Fever", keywords: ["hot", "temperature", "burning", "fever"] },
-  { id: 2, name: "Headache", keywords: ["head pain", "headache", "migraine", "head pounding"] },
-  { id: 3, name: "Cough", keywords: ["coughing", "cough", "chest", "throat"] },
-  { id: 4, name: "Fatigue", keywords: ["tired", "exhausted", "fatigue", "no energy"] },
-  { id: 5, name: "Sore throat", keywords: ["throat pain", "sore", "throat", "swallowing pain"] },
-  { id: 6, name: "Shortness of breath", keywords: ["breathing", "short breath", "breathless", "difficult breathing"] },
-  { id: 7, name: "Nausea", keywords: ["sick", "vomit", "nausea", "queasy"] },
-  { id: 8, name: "Joint pain", keywords: ["joint", "pain", "ache", "arthritis"] },
-  { id: 9, name: "Chest pain", keywords: ["chest", "pain", "heart", "pressure"] }
+  { id: 1, name: "Fever", keywords: ["hot", "temperature", "burning", "fever"], common: true },
+  { id: 2, name: "Headache", keywords: ["head pain", "headache", "migraine", "head pounding"], common: true },
+  { id: 3, name: "Cough", keywords: ["coughing", "cough", "chest", "throat"], common: true },
+  { id: 4, name: "Fatigue", keywords: ["tired", "exhausted", "fatigue", "no energy"], common: true },
+  { id: 5, name: "Sore throat", keywords: ["throat pain", "sore", "throat", "swallowing pain"], common: true },
+  { id: 6, name: "Shortness of breath", keywords: ["breathing", "short breath", "breathless", "difficult breathing"], common: false },
+  { id: 7, name: "Nausea", keywords: ["sick", "vomit", "nausea", "queasy"], common: false },
+  { id: 8, name: "Joint pain", keywords: ["joint", "pain", "ache", "arthritis"], common: false },
+  { id: 9, name: "Chest pain", keywords: ["chest", "pain", "heart", "pressure"], common: false },
+  { id: 10, name: "Dizziness", keywords: ["dizzy", "lightheaded", "vertigo", "spinning"], common: false },
+  { id: 11, name: "Rash", keywords: ["skin", "itchy", "rash", "bumps"], common: false },
+  { id: 12, name: "Abdominal pain", keywords: ["stomach", "pain", "abdomen", "cramps"], common: false },
+  { id: 13, name: "Back pain", keywords: ["back", "pain", "spine", "backache"], common: false },
+  { id: 14, name: "Diarrhea", keywords: ["loose stool", "watery", "diarrhea"], common: false },
+  { id: 15, name: "Muscle aches", keywords: ["muscle", "pain", "ache", "soreness"], common: false }
+];
+
+// Common symptom combinations for recommendations
+const commonSymptomCombinations = [
+  { name: "Cold symptoms", symptoms: ["Fever", "Cough", "Sore throat"] },
+  { name: "Flu-like symptoms", symptoms: ["Fever", "Headache", "Fatigue", "Muscle aches"] },
+  { name: "Digestive issues", symptoms: ["Nausea", "Abdominal pain", "Diarrhea"] },
+  { name: "Respiratory problems", symptoms: ["Cough", "Shortness of breath", "Chest pain"] },
+  { name: "Stress-related symptoms", symptoms: ["Headache", "Fatigue", "Muscle aches"] }
 ];
 
 const mockDiagnoses = [
@@ -87,7 +102,42 @@ const SymptomChecker = () => {
   const [stage, setStage] = useState<'input' | 'analyzing' | 'results'>('input');
   const [results, setResults] = useState<any>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [recommendedSymptoms, setRecommendedSymptoms] = useState<string[]>([]);
   const { toast } = useToast();
+
+  // Generate recommended symptoms based on current symptoms
+  useEffect(() => {
+    if (userSymptoms.length > 0) {
+      // Find related symptoms
+      let related: string[] = [];
+      
+      // Check if current symptoms match any common combinations
+      for (const combo of commonSymptomCombinations) {
+        const matchedSymptoms = combo.symptoms.filter(s => userSymptoms.includes(s));
+        if (matchedSymptoms.length > 0 && matchedSymptoms.length < combo.symptoms.length) {
+          // Add symptoms from the combination that aren't already selected
+          related = [...related, ...combo.symptoms.filter(s => !userSymptoms.includes(s))];
+        }
+      }
+      
+      // Add common symptoms that aren't selected yet
+      if (related.length < 3) {
+        const commonSymptoms = mockSymptomDatabase
+          .filter(s => s.common && !userSymptoms.includes(s.name))
+          .map(s => s.name);
+        related = [...related, ...commonSymptoms].slice(0, 5);
+      }
+      
+      // Remove duplicates and limit to 5
+      setRecommendedSymptoms([...new Set(related)].slice(0, 5));
+    } else {
+      // If no symptoms are selected, show common symptoms
+      const commonSymptoms = mockSymptomDatabase
+        .filter(s => s.common)
+        .map(s => s.name);
+      setRecommendedSymptoms(commonSymptoms);
+    }
+  }, [userSymptoms]);
 
   // Function to handle input changes and provide suggestions
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -264,6 +314,26 @@ const SymptomChecker = () => {
                 </div>
               </form>
               
+              {/* Recommended symptoms */}
+              {recommendedSymptoms.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="font-medium text-lg mb-3">Common symptoms you might be experiencing:</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {recommendedSymptoms.map((symptom, index) => (
+                      <Button
+                        key={index}
+                        variant="outline"
+                        className="bg-gray-50 hover:bg-gray-100 border-gray-200"
+                        onClick={() => addSymptom(symptom)}
+                      >
+                        <ThumbsUp className="w-4 h-4 mr-2 text-health-primary/70" />
+                        {symptom}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
               {/* Current symptoms */}
               <div className="space-y-4">
                 <h3 className="font-medium text-lg">Your symptoms:</h3>
@@ -285,7 +355,7 @@ const SymptomChecker = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500">No symptoms added yet. Type your symptoms in the field above.</p>
+                  <p className="text-gray-500">No symptoms added yet. Type your symptoms in the field above or select from the recommendations.</p>
                 )}
               </div>
               
