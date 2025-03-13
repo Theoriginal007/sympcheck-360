@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Hero from '@/components/home/Hero';
 import Features from '@/components/home/Features';
 import Stats from '@/components/home/Stats';
@@ -28,9 +29,15 @@ const Index = () => {
               <HealthDashboard />
             </div>
             <div className="mt-10">
-              <Button size="lg" className="bg-health-primary hover:bg-health-primary/90">
-                Access Full Dashboard
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button 
+                size="lg" 
+                className="bg-health-primary hover:bg-health-primary/90"
+                asChild
+              >
+                <Link to="/dashboard">
+                  Access Full Dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </div>
@@ -63,8 +70,13 @@ const Index = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button className="mt-6 bg-health-primary hover:bg-health-primary/90">
-                    Try Symptom Checker
+                  <Button 
+                    className="mt-6 bg-health-primary hover:bg-health-primary/90"
+                    asChild
+                  >
+                    <Link to="/symptom-checker">
+                      Try Symptom Checker
+                    </Link>
                   </Button>
                 </div>
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
@@ -77,8 +89,13 @@ const Index = () => {
                     rows={4}
                     placeholder="I've been experiencing headaches for the past three days, primarily in the morning..."
                   ></textarea>
-                  <Button className="w-full bg-health-primary hover:bg-health-primary/90">
-                    Analyze Symptoms
+                  <Button 
+                    className="w-full bg-health-primary hover:bg-health-primary/90"
+                    asChild
+                  >
+                    <Link to="/symptom-checker">
+                      Analyze Symptoms
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -116,8 +133,14 @@ const Index = () => {
                   <h3 className="text-xl font-semibold mb-2">{option.title}</h3>
                   <p className="opacity-90 mb-4">{option.description}</p>
                   <p className="text-2xl font-bold mb-4">{option.price}</p>
-                  <Button variant="outline" className="w-full border-white text-white hover:bg-white hover:text-health-primary">
-                    Book Now
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-white text-white hover:bg-white hover:text-health-primary"
+                    asChild
+                  >
+                    <Link to="/consultations">
+                      Book Now
+                    </Link>
                   </Button>
                 </div>
               ))}
