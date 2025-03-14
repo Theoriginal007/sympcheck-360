@@ -11,14 +11,20 @@ import HealthDashboard from '@/components/health-dashboard/HealthDashboard';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 
+/**
+ * Landing page component that showcases the app's main features
+ * and provides navigation to other sections
+ */
 const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       
       <main>
+        {/* Hero section with main call-to-action */}
         <Hero />
         
+        {/* Dashboard preview section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Experience Our AI-Powered Health Dashboard</h2>
@@ -43,8 +49,10 @@ const Index = () => {
           </div>
         </section>
         
+        {/* Features showcase section */}
         <Features />
         
+        {/* Symptom checker section */}
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">AI-Powered Symptom Checker</h2>
@@ -103,8 +111,10 @@ const Index = () => {
           </div>
         </section>
         
+        {/* Statistics section */}
         <Stats />
         
+        {/* Consultation options section */}
         <section className="py-20 bg-gradient-to-br from-health-primary to-health-secondary text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Consult with Healthcare Professionals</h2>
@@ -148,6 +158,7 @@ const Index = () => {
           </div>
         </section>
         
+        {/* Testimonials section */}
         <TestimonialSection />
       </main>
       

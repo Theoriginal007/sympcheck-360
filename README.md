@@ -94,6 +94,27 @@ src/
 ### State Management
 - React Query (@tanstack/react-query): Data-fetching and state management
 
+## Development Roadmap
+
+### Phase 1: Frontend MVP (Current)
+- Complete UI implementation
+- Symptom checking functionality
+- Health dashboard visualization
+- Consultation booking flow
+- Educational resources
+
+### Phase 2: Backend Integration (Upcoming)
+- User authentication and profile management
+- Data persistence with database integration
+- API development for data exchange with third-party services
+- Real-time communication for consultations
+
+### Phase 3: Advanced Features (Future)
+- Payment processing integration
+- Medical record management
+- Healthcare provider portal
+- Mobile application development
+
 ## Getting Started
 
 ### Prerequisites

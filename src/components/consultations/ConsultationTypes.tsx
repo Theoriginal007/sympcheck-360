@@ -1,7 +1,12 @@
 
-// ConsultationTypes.tsx
-// Component displaying available consultation types (video, audio, text)
-
+/**
+ * ConsultationTypes Component
+ * 
+ * Displays the available consultation types (video, audio, text) with a clean UI.
+ * Uses the ConsultationTypeSelector to handle the selection of different consultation options.
+ * 
+ * @component
+ */
 import React from 'react';
 import ConsultationTypeSelector from './ConsultationTypeSelector';
 
