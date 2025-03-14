@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 import { 
   Video, 
   MessageSquare, 
@@ -50,6 +51,7 @@ const timeSlots = [
 ];
 
 const Consultations = () => {
+  const navigate = useNavigate();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [consultationType, setConsultationType] = useState("video");
   const [selectedDoctor, setSelectedDoctor] = useState<number | null>(null);
@@ -109,6 +111,16 @@ const Consultations = () => {
     setContactEmail("");
     setBookingComplete(false);
     setBookingDetails(null);
+  };
+
+  // Function to navigate to doctor's detail page
+  const viewDoctorDetails = (doctorId: number) => {
+    // In a real app, this would navigate to a doctor details page
+    console.log(`Viewing details for doctor ID: ${doctorId}`);
+    toast({
+      title: "Doctor Selected",
+      description: `You've selected ${doctors.find(d => d.id === doctorId)?.name}`,
+    });
   };
 
   return (
@@ -238,6 +250,16 @@ const Consultations = () => {
                                         <span className="text-xs px-2 py-0.5 rounded-full mt-1 inline-block bg-green-100 text-green-800">
                                           Available
                                         </span>
+                                        <Button 
+                                          variant="link" 
+                                          className="p-0 h-auto text-health-primary text-xs mt-1"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            viewDoctorDetails(doctor.id);
+                                          }}
+                                        >
+                                          View Profile
+                                        </Button>
                                       </div>
                                     </div>
                                   </div>
@@ -461,7 +483,7 @@ const Consultations = () => {
                       </Button>
                       <Button 
                         className="bg-health-primary hover:bg-health-primary/90"
-                        onClick={() => window.location.href = '/dashboard'}
+                        onClick={() => navigate('/dashboard')}
                       >
                         Go to Dashboard
                       </Button>
