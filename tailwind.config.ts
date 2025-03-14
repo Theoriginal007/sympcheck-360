@@ -63,16 +63,16 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// HealthSphere custom colors
+				// HealthSphere custom colors - updated with bolder, nicer colors
 				health: {
-					primary: '#0080FF',
-					secondary: '#6AAFFF',
-					accent: '#FF5C00',
+					primary: '#8B5CF6', // Updated from blue to vivid purple
+					secondary: '#7E69AB', // Secondary purple
+					accent: '#F97316', // Bright orange
 					surface: '#F5F7FA',
 					text: '#333333',
-					success: '#00C853',
-					warning: '#FFD600',
-					error: '#FF3B30',
+					success: '#10B981', // Emerald green
+					warning: '#FBBF24', // Amber yellow
+					error: '#EF4444', // Red
 					muted: '#8E8E93'
 				}
 			},

@@ -2,7 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Loader2, ChevronRight, Stethoscope, AlertCircle, ThumbsUp } from 'lucide-react';
+import { 
+  Search, 
+  Loader2, 
+  ChevronRight, 
+  Stethoscope, 
+  AlertCircle, 
+  ThumbsUp, 
+  Brain, 
+  MessageCircle, 
+  Shield, 
+  ActivitySquare, 
+  ArrowRight
+} from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 // Mock data for demo purposes
@@ -265,17 +277,64 @@ const SymptomChecker = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 md:py-20 max-w-4xl">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    <div className="container mx-auto px-4 py-12 md:py-20 max-w-5xl">
+      {/* Hero section */}
+      <div className="text-center mb-12 animate-fade-in">
+        <h1 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-health-primary to-health-accent">
+          AI-Powered Symptom Checker
+        </h1>
+        <p className="text-gray-600 text-lg max-w-3xl mx-auto">
+          Our advanced system analyzes your symptoms and provides personalized health guidance
+          based on the latest medical knowledge, adapted for Kenyan healthcare context.
+        </p>
+      </div>
+      
+      {/* Key benefits */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        {[
+          {
+            icon: <Brain className="h-8 w-8 text-white" />,
+            title: "AI-Powered Analysis",
+            description: "Utilizes advanced artificial intelligence to analyze symptoms",
+            color: "bg-health-primary",
+          },
+          {
+            icon: <Shield className="h-8 w-8 text-white" />,
+            title: "Privacy Protected",
+            description: "Your health data is secure and protected under Kenya's Data Protection Act",
+            color: "bg-health-success",
+          },
+          {
+            icon: <MessageCircle className="h-8 w-8 text-white" />,
+            title: "Culturally Relevant",
+            description: "Recommendations tailored to Kenyan healthcare context and practices",
+            color: "bg-health-accent",
+          },
+        ].map((benefit, index) => (
+          <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-fade-in" style={{ animationDelay: `${0.2 * index}s` }}>
+            <div className={`${benefit.color} p-4 flex items-center`}>
+              <div className="bg-white/20 rounded-lg p-2">
+                {benefit.icon}
+              </div>
+              <h3 className="ml-3 text-xl font-bold text-white">{benefit.title}</h3>
+            </div>
+            <div className="p-4">
+              <p className="text-gray-600">{benefit.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
         {/* Header */}
-        <div className="bg-health-primary/10 p-6 md:p-8 border-b border-health-primary/20">
+        <div className="bg-gradient-to-r from-health-primary/20 to-health-secondary/20 p-6 md:p-8 border-b border-health-primary/10">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-health-primary rounded-full flex items-center justify-center">
-              <Stethoscope className="w-6 h-6 text-white" />
+            <div className="w-14 h-14 bg-health-primary rounded-full flex items-center justify-center">
+              <Stethoscope className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-health-text">AI Symptom Checker</h2>
-              <p className="text-gray-600">Describe your symptoms for a preliminary health assessment</p>
+              <h2 className="text-2xl font-bold text-health-text">Symptom Analysis</h2>
+              <p className="text-gray-600">Share your symptoms for a preliminary health assessment</p>
             </div>
           </div>
         </div>
@@ -283,8 +342,50 @@ const SymptomChecker = () => {
         <div className="p-6 md:p-8">
           {stage === 'input' && (
             <div className="animate-fade-in">
+              {/* How it works section */}
+              <div className="mb-8 bg-gray-50 p-6 rounded-xl border border-gray-100">
+                <h3 className="text-xl font-semibold mb-4">How It Works</h3>
+                <div className="grid md:grid-cols-4 gap-4">
+                  {[
+                    {
+                      step: 1,
+                      title: "Describe Symptoms",
+                      description: "Tell us what you're experiencing",
+                      icon: <MessageCircle className="h-6 w-6 text-health-primary" />
+                    },
+                    {
+                      step: 2,
+                      title: "AI Analysis",
+                      description: "Our AI evaluates your symptoms",
+                      icon: <Brain className="h-6 w-6 text-health-primary" />
+                    },
+                    {
+                      step: 3,
+                      title: "Get Insights",
+                      description: "Receive preliminary guidance",
+                      icon: <ActivitySquare className="h-6 w-6 text-health-primary" />
+                    },
+                    {
+                      step: 4,
+                      title: "Next Steps",
+                      description: "Book a consultation if needed",
+                      icon: <ArrowRight className="h-6 w-6 text-health-primary" />
+                    }
+                  ].map((step, index) => (
+                    <div key={index} className="flex flex-col items-center text-center">
+                      <div className="w-12 h-12 rounded-full bg-health-primary/10 flex items-center justify-center mb-3">
+                        {step.icon}
+                      </div>
+                      <div className="text-sm font-semibold">{step.title}</div>
+                      <div className="text-xs text-gray-500">{step.description}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
               {/* Symptom input */}
               <form onSubmit={handleSubmit} className="mb-8 relative">
+                <h3 className="text-lg font-semibold mb-4">Enter Your Symptoms</h3>
                 <div className="flex items-center space-x-2">
                   <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -326,7 +427,7 @@ const SymptomChecker = () => {
                         className="bg-gray-50 hover:bg-gray-100 border-gray-200"
                         onClick={() => addSymptom(symptom)}
                       >
-                        <ThumbsUp className="w-4 h-4 mr-2 text-health-primary/70" />
+                        <ThumbsUp className="w-4 h-4 mr-2 text-health-primary" />
                         {symptom}
                       </Button>
                     ))}
@@ -335,7 +436,7 @@ const SymptomChecker = () => {
               )}
               
               {/* Current symptoms */}
-              <div className="space-y-4">
+              <div className="space-y-4 bg-white p-6 rounded-xl border border-gray-200">
                 <h3 className="font-medium text-lg">Your symptoms:</h3>
                 {userSymptoms.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
@@ -376,11 +477,17 @@ const SymptomChecker = () => {
           )}
           
           {stage === 'analyzing' && (
-            <div className="py-12 flex flex-col items-center animate-fade-in">
-              <Loader2 className="w-16 h-16 text-health-primary animate-spin mb-4" />
-              <h3 className="text-xl font-medium mb-2">Analyzing your symptoms...</h3>
-              <p className="text-gray-600 text-center max-w-md">
-                Our AI system is analyzing your symptoms and comparing them with thousands of health conditions.
+            <div className="py-20 flex flex-col items-center animate-fade-in">
+              <div className="relative w-24 h-24 mb-6">
+                <div className="absolute inset-0 bg-health-primary/20 rounded-full animate-ping"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Loader2 className="w-16 h-16 text-health-primary animate-spin" />
+                </div>
+              </div>
+              <h3 className="text-2xl font-medium mb-3 text-health-primary">Analyzing your symptoms...</h3>
+              <p className="text-gray-600 text-center max-w-lg">
+                Our AI system is analyzing your symptoms and comparing them with thousands of health conditions
+                to provide you with the most accurate preliminary assessment.
               </p>
             </div>
           )}
@@ -389,8 +496,8 @@ const SymptomChecker = () => {
             <div className="animate-fade-in">
               {/* Results header */}
               <div className="mb-8 text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-health-primary/10 mb-4">
-                  <Stethoscope className="w-10 h-10 text-health-primary" />
+                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-health-primary to-health-secondary mb-4">
+                  <Stethoscope className="w-12 h-12 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold mb-2">{results.condition}</h3>
                 <div className="flex items-center justify-center space-x-4">
@@ -437,8 +544,8 @@ const SymptomChecker = () => {
               {/* Recommendations */}
               <div className="mb-8">
                 <h4 className="font-medium mb-3">Recommendations:</h4>
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                  <ul className="space-y-2">
+                <div className="bg-gradient-to-r from-health-primary/5 to-health-secondary/5 rounded-xl p-6 border border-health-primary/10">
+                  <ul className="space-y-3">
                     {results.recommendations.map((rec: string, index: number) => (
                       <li key={index} className="flex items-start">
                         <ChevronRight className="w-5 h-5 text-health-primary flex-shrink-0 mt-0.5" />
@@ -450,8 +557,8 @@ const SymptomChecker = () => {
               </div>
               
               {/* Disclaimer */}
-              <div className="mb-8 flex items-start p-4 bg-yellow-50 rounded-xl border border-yellow-200">
-                <AlertCircle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+              <div className="mb-8 flex items-start p-5 bg-yellow-50 rounded-xl border border-yellow-200">
+                <AlertCircle className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-0.5" />
                 <div className="ml-3">
                   <h5 className="font-medium text-yellow-700">Important Disclaimer</h5>
                   <p className="text-yellow-700 text-sm">
@@ -464,7 +571,7 @@ const SymptomChecker = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
                   variant="outline" 
-                  className="flex-1"
+                  className="flex-1 border-health-primary text-health-primary hover:bg-health-primary/5"
                   onClick={restart}
                 >
                   Start Over
@@ -478,6 +585,35 @@ const SymptomChecker = () => {
               </div>
             </div>
           )}
+        </div>
+      </div>
+      
+      {/* Additional information section */}
+      <div className="mt-16">
+        <h2 className="text-2xl font-bold mb-6 text-center">Why Use HealthSphere's Symptom Checker?</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            {
+              title: "Culturally Relevant",
+              description: "Adapted specifically for Kenyan healthcare context and medical practices",
+              color: "border-health-primary"
+            },
+            {
+              title: "AI-Powered",
+              description: "Utilizes advanced artificial intelligence for accurate symptom analysis",
+              color: "border-health-accent"
+            },
+            {
+              title: "Healthcare Integration",
+              description: "Seamlessly connects with virtual consultations for comprehensive care",
+              color: "border-health-secondary"
+            }
+          ].map((feature, index) => (
+            <div key={index} className={`p-6 rounded-xl bg-white shadow-sm ${feature.color} border`}>
+              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+              <p className="text-gray-600">{feature.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
