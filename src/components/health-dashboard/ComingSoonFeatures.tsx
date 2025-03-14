@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { 
   BrainCircuit, 
-  WatchCircle, 
+  Timer, 
   FileText, 
   Lock, 
   Languages
@@ -31,7 +31,7 @@ const ComingSoonFeatures = () => {
     {
       title: "Wearable Device Integration",
       description: "Connect your wearable devices to track real-time health metrics, improving health monitoring by 40%.",
-      icon: <WatchCircle className="h-10 w-10 text-health-accent" />,
+      icon: <Timer className="h-10 w-10 text-health-accent" />,
       eta: "Phase 2 - Coming Soon"
     },
     {
