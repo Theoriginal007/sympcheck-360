@@ -5,7 +5,7 @@ import Footer from '@/components/layout/Footer';
 import HealthDashboard from '@/components/health-dashboard/HealthDashboard';
 import ComingSoonFeatures from '@/components/health-dashboard/ComingSoonFeatures';
 import { useToast } from '@/components/ui/use-toast';
-import { ArrowUpRight, HandWaving } from 'lucide-react';
+import { ArrowUpRight, Wave } from 'lucide-react';
 
 /**
  * Dashboard page that includes health monitoring features and
@@ -23,7 +23,6 @@ const Dashboard = () => {
     toast({
       title: "Welcome to your Health Dashboard",
       description: "Track your health metrics and discover upcoming features",
-      icon: <HandWaving className="h-5 w-5 text-health-accent" />,
     });
   }, [toast]);
 
