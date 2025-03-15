@@ -1,11 +1,10 @@
-
 import React, { useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HealthDashboard from '@/components/health-dashboard/HealthDashboard';
 import ComingSoonFeatures from '@/components/health-dashboard/ComingSoonFeatures';
 import { useToast } from '@/components/ui/use-toast';
-import { ArrowUpRight, Wave } from 'lucide-react';
+import { ArrowUpRight, Waves } from 'lucide-react';
 
 /**
  * Dashboard page that includes health monitoring features and
